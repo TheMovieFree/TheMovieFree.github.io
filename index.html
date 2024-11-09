@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVIEFREE | Movies</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Blue_play_button.svg/1200px-Blue_play_button.svg.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #0d0d0d;
+            color: #fff;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: url('https://image.tmdb.org/t/p/original/your-image-path.jpg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 1;
+            animation: fadeInHero 1.5s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 4.5em;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #1E90FF;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-top: 20px;
+            max-width: 600px;
+        }
+
+        .search-container {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #search-bar {
+            width: 70%;
+            max-width: 800px;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+            color: #333;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        #search-bar:focus {
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 10px rgba(30, 144, 255, 0.6);
+            border: 2px solid #1E90FF;
+        }
+
+        /* Movie Grid */
+        #movie-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            width: 90%;
+            margin-top: -100px;
+            padding-bottom: 50px;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-in-out;
+        }
+
+        /* Movie Card */
+        .movie-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background-color: #222;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .movie-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .movie-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .movie-item:hover .movie-info {
+            opacity: 1;
+        }
+
+        .movie-info h4 {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #fff;
+            text-transform: capitalize;
+            margin-bottom: 10px;
+        }
+
+        .movie-info .rating {
+            font-size: 1.1em;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .movie-info .release-date {
+            font-size: 1em;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .movie-info a {
+            padding: 12px 25px;
+            background-color: #1E90FF;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 25px;
+            text-decoration: none;
+            text-transform: uppercase;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .movie-info a:hover {
+            background-color: #1c75b2;
+        }
+
+        /* Modal */
+        #movie-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeInModal 0.4s ease-in-out;
+        }
+
+        #movie-modal iframe {
+            width: 80%;
+            height: 80%;
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        #movie-modal .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2.5em;
+            color: white;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #movie-modal .close:hover {
+            color: #1E90FF;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInHero {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInModal {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero">
+        <div>
+            <h1><i class="fas fa-play-circle"></i> MOVIEFREE</h1>
+            <p>Stream your favorite movies and TV shows anytime, anywhere.</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search Movies or TV Shows..." oninput="searchMovies()">
+        </div>
+    </div>
+
+    <div id="movie-container"></div>
+
+    <div id="movie-modal">
+        <span class="close" onclick="closeMovieModal()">&times;</span>
+        <iframe id="movie-frame" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        const apiKey = '9ecfd7e66acabc26453faf47ed14b140';
+        const movieContainer = document.getElementById('movie-container');
+        const searchBar = document.getElementById('search-bar');
+
+        function fetchMovies(query = '') {
+            const url = query ?
+                `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${query}&language=en-US` :
+                `https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}&language=en-US`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    movieContainer.innerHTML = '';
+                    data.results.forEach(item => {
+                        const isMovie = item.media_type === 'movie';
+                        const isTV = item.media_type === 'tv';
+
+                        if (isMovie || isTV) {
+                            const releaseYear = (item.release_date || item.first_air_date || '').slice(0, 4);
+                            const movieElement = document.createElement('div');
+                            movieElement.classList.add('movie-item');
+                            movieElement.innerHTML = 
+                                `<img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
+                                <div class="movie-info">
+                                    <h4>${item.title || item.name}</h4>
+                                    <div class="rating"><i class="fas fa-star"></i> ${item.vote_average.toFixed(1)}/10</div>
+                                    <div class="release-date">${releaseYear}</div>
+                                    <a href="#" onclick="openMovie('${item.id}', '${isMovie ? 'movie' : 'tv'}', '${item.name}')">Watch Now</a>
+                                </div>`;
+                            movieContainer.appendChild(movieElement);
+                        }
+                    });
+                });
+        }
+
+        function openMovie(id, type, title) {
+            if (type === 'tv') {
+                const season = prompt(`Enter season number for "${title}":`);
+                const episode = prompt(`Enter episode number for season ${season}:`);
+                const url = `https://moviesapi.club/tv/${id}-${season}-${episode}`;
+                showMovieModal(url);
+            } else if (type === 'movie') {
+                const url = `https://moviesapi.club/movie/${id}`;
+                showMovieModal(url);
+            }
+        }
+
+        function showMovieModal(url) {
+            const modal = document.getElementById('movie-modal');
+            const iframe = document.getElementById('movie-frame');
+            modal.style.display = 'flex';
+            iframe.src = url;
+        }
+
+        function closeMovieModal() {
+            document.getElementById('movie-modal').style.display = 'none';
+            document.getElementById('movie-frame').src = '';
+        }
+
+        function searchMovies() {
+            const query = searchBar.value.trim();
+            fetchMovies(query);
+        }
+
+        fetchMovies();
+    </script>
+</body>
+
+</html>
