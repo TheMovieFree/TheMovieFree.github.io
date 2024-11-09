@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVIEFREE | FAQ</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Blue_play_button.svg/1200px-Blue_play_button.svg.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #141414;
+            color: #fff;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 0;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            color: #1E90FF;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 i {
+            margin-right: 12px;
+            font-size: 1.6em;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 60px;
+        }
+
+        .faq-question {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            cursor: pointer;
+            color: #1E90FF;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #222;
+            transition: background-color 0.3s;
+        }
+
+        .faq-question:hover {
+            background-color: #1c75b2;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px 20px;
+            background-color: #333;
+            border-left: 4px solid #1E90FF;
+            border-radius: 0 5px 5px 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><i class="fas fa-question-circle"></i> MOVIEFREE FAQ</h1>
+    </header>
+
+    <div class="faq-section">
+        <div class="faq-item">
+            <div class="faq-question">Is This Site Legal?</div>
+            <div class="faq-answer">
+                <p>MOVIEFREE does not host any content directly. It aggregates links to content from other sources available on the web. It’s recommended to check the legality of streaming content in your region.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Do I Need an Account to Watch Movies?</div>
+            <div class="faq-answer">
+                <p>No, you don’t need an account to access most of the content on MOVIEFREE. Simply search for a title and enjoy watching!</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Is There a Cost to Use This Site?</div>
+            <div class="faq-answer">
+                <p>MOVIEFREE is free to use. There are no charges for browsing or watching content.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Why Is Some Content Unavailable?</div>
+            <div class="faq-answer">
+                <p>Content availability may depend on the source or location restrictions. If something is unavailable, try searching again later.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Can I Download Movies from This Site?</div>
+            <div class="faq-answer">
+                <p>MOVIEFREE is a streaming platform, and it does not support downloading of movies or shows.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                answer.style.display = answer.style.display === 'none' || answer.style.display === '' ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
