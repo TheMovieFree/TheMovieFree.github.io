@@ -17,73 +17,55 @@
         }
 
         body {
-            background-color: #0d0d0d;
+            background-color: #141414;
             color: #fff;
             font-size: 16px;
             line-height: 1.6;
+            padding: 0;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Hero Section */
-        .hero {
-            position: relative;
+        /* Header */
+        header {
             width: 100%;
-            height: 100vh;
-            background: url('https://image.tmdb.org/t/p/original/your-image-path.jpg') no-repeat center center/cover;
+            background-color: #222;
+            padding: 20px 0;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            color: white;
-            text-align: center;
-            z-index: 1;
-            animation: fadeInHero 1.5s ease-in-out;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
         }
 
-        .hero h1 {
-            font-size: 4.5em;
-            font-weight: bold;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+        header h1 {
+            font-size: 2.5em;
             color: #1E90FF;
-        }
-
-        .hero p {
-            font-size: 1.5em;
-            margin-top: 20px;
-            max-width: 600px;
-        }
-
-        .search-container {
-            position: absolute;
-            top: 80%;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
-            justify-content: center;
             align-items: center;
         }
 
-        #search-bar {
-            width: 70%;
-            max-width: 800px;
-            padding: 15px 20px;
-            border-radius: 50px;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.8);
-            font-size: 1.2em;
-            color: #333;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        header h1 i {
+            margin-right: 10px;
+            font-size: 1.5em;
         }
 
-        #search-bar:focus {
-            background-color: rgba(255, 255, 255, 1);
+        header #search-bar {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            border: 2px solid #333;
+            background-color: #333;
+            color: #fff;
+            outline: none;
+            transition: 0.3s;
+            width: 300px;
+        }
+
+        header #search-bar:focus {
+            border-color: #1E90FF;
             box-shadow: 0 0 10px rgba(30, 144, 255, 0.6);
-            border: 2px solid #1E90FF;
         }
 
         /* Movie Grid */
@@ -92,8 +74,7 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
             width: 90%;
-            margin-top: -100px;
-            padding-bottom: 50px;
+            margin-top: 40px;
             opacity: 0;
             animation: fadeIn 1s forwards ease-in-out;
         }
@@ -103,15 +84,15 @@
             position: relative;
             overflow: hidden;
             border-radius: 15px;
-            background-color: #222;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
         }
 
         .movie-item:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9);
         }
 
         .movie-item img {
@@ -122,14 +103,14 @@
         }
 
         .movie-info {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.85);
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
             border-radius: 0 0 15px 15px;
         }
 
@@ -139,14 +120,14 @@
 
         .movie-info h4 {
             font-size: 1.4em;
-            font-weight: 700;
-            color: #fff;
-            text-transform: capitalize;
             margin-bottom: 10px;
+            color: #fff;
+            font-weight: 600;
+            text-transform: capitalize;
         }
 
         .movie-info .rating {
-            font-size: 1.1em;
+            font-size: 1.2em;
             color: #ffd700;
             margin-bottom: 10px;
         }
@@ -166,6 +147,7 @@
             border-radius: 25px;
             text-decoration: none;
             text-transform: uppercase;
+            letter-spacing: 1px;
             display: inline-block;
             transition: background-color 0.3s ease;
         }
@@ -211,18 +193,8 @@
             color: #1E90FF;
         }
 
-        /* Animations */
+        /* Fade In Animation */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeInHero {
             from {
                 opacity: 0;
             }
@@ -245,16 +217,10 @@
 </head>
 
 <body>
-    <div class="hero">
-        <div>
-            <h1><i class="fas fa-play-circle"></i> MOVIEFREE</h1>
-            <p>Stream your favorite movies and TV shows anytime, anywhere.</p>
-        </div>
-
-        <div class="search-container">
-            <input type="text" id="search-bar" placeholder="Search Movies or TV Shows..." oninput="searchMovies()">
-        </div>
-    </div>
+    <header>
+        <h1><i class="fas fa-play-circle"></i> MOVIEFREE</h1>
+        <input type="text" id="search-bar" placeholder="Search Movies or TV Shows..." oninput="searchMovies()">
+    </header>
 
     <div id="movie-container"></div>
 
@@ -285,14 +251,15 @@
                             const releaseYear = (item.release_date || item.first_air_date || '').slice(0, 4);
                             const movieElement = document.createElement('div');
                             movieElement.classList.add('movie-item');
-                            movieElement.innerHTML = 
-                                `<img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
+                            movieElement.innerHTML = `
+                                <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
                                 <div class="movie-info">
                                     <h4>${item.title || item.name}</h4>
                                     <div class="rating"><i class="fas fa-star"></i> ${item.vote_average.toFixed(1)}/10</div>
                                     <div class="release-date">${releaseYear}</div>
                                     <a href="#" onclick="openMovie('${item.id}', '${isMovie ? 'movie' : 'tv'}', '${item.name}')">Watch Now</a>
-                                </div>`;
+                                </div>
+                            `;
                             movieContainer.appendChild(movieElement);
                         }
                     });
