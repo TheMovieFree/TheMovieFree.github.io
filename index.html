@@ -214,6 +214,16 @@
             }
         }
     </style>
+    <script>
+        window.onload = function() {
+            // Check if the page is inside an iframe
+            if (window.top !== window.self) {
+                // If it is embedded in an iframe, display a message and redirect
+                alert('This page is embedded. Visit the real website at: https://themoviefree.github.io');
+                window.location.href = "https://themoviefree.github.io";
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -300,3 +310,4 @@
 </body>
 
 </html>
+
