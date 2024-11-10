@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOVIEFREE | Movies</title>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVIEFREE | Watch Movies and TV Shows for Free</title>
+    <meta name="description" content="Watch movies and TV shows for free on MOVIEFREE. Enjoy the latest blockbusters and TV series in high quality for free.">
+    <meta name="keywords" content="moviefree, movie free, free movies, watch movies online, free streaming">
+    <meta name="robots" content="index, follow">
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Blue_play_button.svg/1200px-Blue_play_button.svg.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -13,63 +20,63 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
 
         body {
-            background-color: #141414;
-            color: #fff;
-            font-size: 16px;
+            background-color: #121212;
+            color: #ddd;
+            font-size: 18px;
             line-height: 1.6;
-            padding: 0;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding-top: 60px;
         }
 
         /* Header */
         header {
             width: 100%;
             background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px 60px; /* Added more space on the sides */
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
+            position: fixed;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
         }
 
         header h1 {
-            font-size: 2.8em;
+            font-size: 2.5rem;
             color: #1E90FF;
-            font-weight: bold;
+            font-weight: 700;
             display: flex;
             align-items: center;
         }
 
         header h1 i {
             margin-right: 12px;
-            font-size: 1.6em;
+            font-size: 1.8rem;
         }
 
         header #search-bar {
-            padding: 12px 25px;
-            font-size: 1.2em;
+            padding: 10px 20px;
+            font-size: 1.2rem;
             border-radius: 30px;
-            border: 2px solid #333;
-            background-color: #222;
+            border: 2px solid #444;
+            background-color: #333;
             color: #fff;
             outline: none;
             width: 350px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         header #search-bar:focus {
             border-color: #1E90FF;
-            box-shadow: 0 0 12px rgba(30, 144, 255, 0.6);
+            box-shadow: 0 0 8px rgba(30, 144, 255, 0.6);
         }
 
         /* Movie Grid */
@@ -78,7 +85,7 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 30px;
             width: 90%;
-            margin-top: 60px;
+            margin-top: 120px;
             opacity: 0;
             animation: fadeIn 1s forwards ease-in-out;
         }
@@ -87,11 +94,11 @@
         .movie-item {
             position: relative;
             overflow: hidden;
-            border-radius: 15px;
+            border-radius: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             background-color: #222;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
             transform: scale(1);
         }
 
@@ -105,18 +112,19 @@
             height: 100%;
             object-fit: cover;
             transition: opacity 0.3s ease;
+            border-radius: 10px;
         }
 
         .movie-info {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
             opacity: 0;
             transition: opacity 0.3s;
-            border-radius: 0 0 15px 15px;
+            border-radius: 0 0 20px 20px;
         }
 
         .movie-item:hover .movie-info {
@@ -124,8 +132,8 @@
         }
 
         .movie-info h4 {
-            font-size: 1.6em;
-            margin-bottom: 15px;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
             color: #fff;
             font-weight: 700;
             text-transform: capitalize;
@@ -133,22 +141,22 @@
         }
 
         .movie-info .rating {
-            font-size: 1.4em;
+            font-size: 1.3rem;
             color: #ffd700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .movie-info .release-date {
-            font-size: 1.1em;
-            color: #ddd;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #bbb;
+            margin-bottom: 15px;
         }
 
         .movie-info a {
-            padding: 15px 30px;
+            padding: 12px 28px;
             background-color: #1E90FF;
             color: #fff;
-            font-size: 1.2em;
+            font-size: 1.1rem;
             font-weight: 600;
             border-radius: 30px;
             text-decoration: none;
@@ -170,7 +178,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -180,17 +188,17 @@
         #movie-modal iframe {
             width: 80%;
             height: 80%;
-            border-radius: 20px;
+            border-radius: 15px;
             border: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
         }
 
         #movie-modal .close {
             position: absolute;
             top: 20px;
             right: 20px;
-            font-size: 3em;
-            color: white;
+            font-size: 2.5rem;
+            color: #fff;
             cursor: pointer;
             transition: color 0.3s;
         }
@@ -199,7 +207,7 @@
             color: #1E90FF;
         }
 
-        /* Fade In Animation */
+        /* Fade In Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -253,7 +261,6 @@
                         const isMovie = item.media_type === 'movie';
                         const isTV = item.media_type === 'tv';
 
-                        // Check if poster_path exists, if not, skip the item
                         if ((isMovie || isTV) && item.poster_path) {
                             const releaseYear = (item.release_date || item.first_air_date || '').slice(0, 4);
                             const movieElement = document.createElement('div');
