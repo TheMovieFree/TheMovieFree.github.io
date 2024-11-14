@@ -279,6 +279,10 @@
             if (type === 'tv') {
                 const season = prompt(`Enter season number for "${title}":`);
                 const episode = prompt(`Enter episode number for season ${season}:`);
+                if (!season || !episode) {
+                    alert("You must fill in the required fields. Would you like to try again?");
+                    return;
+                }
                 const url = `https://moviesapi.club/tv/${id}-${season}-${episode}`;
                 showMovieModal(url);
             } else if (type === 'movie') {
@@ -309,3 +313,4 @@
 </body>
 
 </html>
+
