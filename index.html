@@ -236,21 +236,20 @@
 
     <div id="movie-container"></div>
 
+    <!-- Movie Modal -->
     <div id="movie-modal">
         <span class="close" onclick="closeMovieModal()">&times;</span>
-        <iframe id="movie-frame" src="" frameborder="0" allowfullscreen></iframe>
+        <iframe id="movie-frame" src="" frameborder="0"></iframe>
     </div>
 
     <script>
-        const apiKey = '9ecfd7e66acabc26453faf47ed14b140';
-        const movieContainer = document.getElementById('movie-container');
+        const apiKey = '9ecfd7e66acabc26453faf47ed14b140';  // New API key
         const searchBar = document.getElementById('search-bar');
+        const movieContainer = document.getElementById('movie-container');
 
         function fetchMovies(query = '') {
-            const url = query ? 
-                https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${query}&language=en-US : 
-                https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=popularity.desc&language=en-US;
-
+            const url = query ? `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${query}` :
+                `https://api.themoviedb.org/3/trending/all/week?api_key=${apiKey}`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -260,15 +259,14 @@
                         if (movie.poster_path && movie.media_type !== 'person') {
                             const movieElement = document.createElement('div');
                             movieElement.classList.add('movie-item');
-                            movieElement.innerHTML = 
-                                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title || movie.name}">
-                                <div class="movie-info">
-                                    <h4>${movie.title || movie.name}</h4>
-                                    <div class="rating">⭐ ${movie.vote_average}</div>
-                                    <div class="release-date">${movie.release_date || movie.first_air_date}</div>
-                                    <a href="javascript:void(0);" onclick="openMovie('${movie.id}', '${movie.media_type}', '${movie.title || movie.name}')">Watch</a>
-                                </div>
-                            ;
+                            movieElement.innerHTML =
+                                `<img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title || movie.name}">
+                                 <div class="movie-info">
+                                     <h4>${movie.title || movie.name}</h4>
+                                     <div class="rating">⭐ ${movie.vote_average}</div>
+                                     <div class="release-date">${movie.release_date || movie.first_air_date}</div>
+                                     <a href="javascript:void(0);" onclick="openMovie('${movie.id}', '${movie.media_type}', '${movie.title || movie.name}')">Watch</a>
+                                 </div>`;
                             movieContainer.appendChild(movieElement);
                         }
                     });
@@ -277,14 +275,31 @@
         }
 
         function openMovie(id, type, title) {
-            window.location.hash = movie-${id};
-            showMovieModal(id, type, title);
+            if (type === 'tv') {
+                const season = prompt('Enter the season number:');
+                const episode = prompt('Enter the episode number:');
+                if (season && episode) {
+                    // Update URL hash with TV show information
+                    window.location.hash = `#tv-${id}-${season}-${episode}`;
+                    showMovieModal(id, type, title, season, episode);
+                }
+            } else {
+                // Update URL hash with movie ID
+                window.location.hash = `#movie-${id}`;
+                showMovieModal(id, type, title);
+            }
         }
 
-        function showMovieModal(id, type, title) {
+        function showMovieModal(id, type, title, season = '', episode = '') {
             const modal = document.getElementById('movie-modal');
             const iframe = document.getElementById('movie-frame');
-            const movieUrl = type === 'tv' ? https://moviesapi.club/tv/${id} : https://moviesapi.club/movie/${id};
+            let movieUrl = '';
+
+            if (type === 'tv') {
+                movieUrl = `https://moviesapi.club/tv/${id}-${season}-${episode}`;
+            } else {
+                movieUrl = `https://moviesapi.club/movie/${id}`;
+            }
 
             iframe.src = movieUrl;
             modal.style.display = 'flex';
@@ -296,38 +311,31 @@
             document.getElementById('movie-frame').src = ''; // Stop video when closing
         }
 
-        window.addEventListener('hashchange', function () {
-            const hash = window.location.hash;
-            if (hash.startsWith('#movie-')) {
-                const movieId = hash.split('-')[1];
-                fetchMovieDetails(movieId);
-            }
-        });
-
-        function fetchMovieDetails(id) {
-            fetch(https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey})
-                .then(response => response.json())
-                .then(movie => {
-                    showMovieModal(id, 'movie', movie.title);
-                });
-        }
-
         function searchMovies() {
             const query = searchBar.value.trim();
             fetchMovies(query);
         }
 
-        // Fetch popular movies initially
-        fetchMovies();
+        // Listen for changes in the URL hash and load the corresponding content
+        window.addEventListener('hashchange', loadFromHash);
+        window.addEventListener('load', loadFromHash);
 
-        // Check URL hash on page load
-        if (window.location.hash) {
+        function loadFromHash() {
             const hash = window.location.hash;
             if (hash.startsWith('#movie-')) {
-                const movieId = hash.split('-')[1];
-                fetchMovieDetails(movieId);
+                const movieId = hash.substring(7);
+                showMovieModal(movieId, 'movie');
+            } else if (hash.startsWith('#tv-')) {
+                const parts = hash.substring(4).split('-');
+                const tvId = parts[0];
+                const season = parts[1];
+                const episode = parts[2];
+                showMovieModal(tvId, 'tv', '', season, episode);
             }
         }
+
+        // Fetch popular movies initially
+        fetchMovies();
     </script>
 </body>
 
