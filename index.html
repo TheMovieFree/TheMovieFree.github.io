@@ -210,6 +210,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -219,6 +220,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -245,62 +247,69 @@
         const searchBar = document.getElementById('search-bar');
 
         function fetchMovies(query = '') {
-            const url = query ?
-                `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${query}&language=en-US` :
-                `https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}&language=en-US`;
+            const url = query ? 
+                https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${query}&language=en-US : 
+                https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&sort_by=popularity.desc&language=en-US;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    const movies = data.results;
                     movieContainer.innerHTML = '';
-                    data.results.forEach(item => {
-                        const isMovie = item.media_type === 'movie';
-                        const isTV = item.media_type === 'tv';
-
-                        if ((isMovie || isTV) && item.poster_path) {
-                            const releaseYear = (item.release_date || item.first_air_date || '').slice(0, 4);
+                    movies.forEach(movie => {
+                        if (movie.poster_path && movie.media_type !== 'person') {
                             const movieElement = document.createElement('div');
                             movieElement.classList.add('movie-item');
-                            movieElement.innerHTML =
-                                `<img src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${item.title || item.name}">
+                            movieElement.innerHTML = 
+                                <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title || movie.name}">
                                 <div class="movie-info">
-                                    <h4>${item.title || item.name}</h4>
-                                    <div class="rating"><i class="fas fa-star"></i> ${item.vote_average.toFixed(1)}/10</div>
-                                    <div class="release-date">${releaseYear}</div>
-                                    <a href="#" onclick="openMovie('${item.id}', '${isMovie ? 'movie' : 'tv'}', '${item.name}')">Watch Now</a>
-                                </div>`;
+                                    <h4>${movie.title || movie.name}</h4>
+                                    <div class="rating">⭐ ${movie.vote_average}</div>
+                                    <div class="release-date">${movie.release_date || movie.first_air_date}</div>
+                                    <a href="javascript:void(0);" onclick="openMovie('${movie.id}', '${movie.media_type}', '${movie.title || movie.name}')">Watch</a>
+                                </div>
+                            ;
                             movieContainer.appendChild(movieElement);
                         }
                     });
+                    movieContainer.style.opacity = 1;
                 });
         }
 
         function openMovie(id, type, title) {
-            if (type === 'tv') {
-                const season = prompt(`Enter season number for "${title}":`);
-                const episode = prompt(`Enter episode number for season ${season}:`);
-                if (!season || !episode) {
-                    alert("You must fill in the required fields. Would you like to try again?");
-                    return;
-                }
-                const url = `https://moviesapi.club/tv/${id}-${season}-${episode}`;
-                showMovieModal(url);
-            } else if (type === 'movie') {
-                const url = `https://moviesapi.club/movie/${id}`;
-                showMovieModal(url);
-            }
+            window.location.hash = movie-${id};
+            showMovieModal(id, type, title);
         }
 
-        function showMovieModal(url) {
+        function showMovieModal(id, type, title) {
             const modal = document.getElementById('movie-modal');
             const iframe = document.getElementById('movie-frame');
+            const movieUrl = type === 'tv' ? https://moviesapi.club/tv/${id} : https://moviesapi.club/movie/${id};
+
+            iframe.src = movieUrl;
             modal.style.display = 'flex';
-            iframe.src = url;
         }
 
         function closeMovieModal() {
-            document.getElementById('movie-modal').style.display = 'none';
-            document.getElementById('movie-frame').src = '';
+            const modal = document.getElementById('movie-modal');
+            modal.style.display = 'none';
+            document.getElementById('movie-frame').src = ''; // Stop video when closing
+        }
+
+        window.addEventListener('hashchange', function () {
+            const hash = window.location.hash;
+            if (hash.startsWith('#movie-')) {
+                const movieId = hash.split('-')[1];
+                fetchMovieDetails(movieId);
+            }
+        });
+
+        function fetchMovieDetails(id) {
+            fetch(https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey})
+                .then(response => response.json())
+                .then(movie => {
+                    showMovieModal(id, 'movie', movie.title);
+                });
         }
 
         function searchMovies() {
@@ -308,9 +317,18 @@
             fetchMovies(query);
         }
 
+        // Fetch popular movies initially
         fetchMovies();
+
+        // Check URL hash on page load
+        if (window.location.hash) {
+            const hash = window.location.hash;
+            if (hash.startsWith('#movie-')) {
+                const movieId = hash.split('-')[1];
+                fetchMovieDetails(movieId);
+            }
+        }
     </script>
 </body>
 
 </html>
-
